@@ -131,3 +131,12 @@ dmypy.json
 
 # Data
 .data/
+
+# Coverage report files
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+.DS_store

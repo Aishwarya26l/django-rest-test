@@ -21,7 +21,7 @@ class JobType(models.Model):
 
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    title = models.CharField(max_length=150, default='')
+    title = models.CharField(max_length=150, null=False)
     job_type = models.ForeignKey(JobType, on_delete=models.CASCADE, default=0)
 
     description = models.CharField(max_length=250, default='')
