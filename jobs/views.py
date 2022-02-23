@@ -4,6 +4,7 @@ from jobs.serializers import JobSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 
 class JobList(APIView):
@@ -18,9 +19,15 @@ class JobList(APIView):
         return Job.objects.all()
 
     def get(self, request, format=None):
-        snippets = self.get_queryset()
-        serializer = JobSerializer(snippets, many=True)
-        return Response(serializer.data)
+        jobs = self.get_queryset()
+
+        # Paginate response
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
+        jobs_page = paginator.paginate_queryset(jobs, request)
+
+        serializer = JobSerializer(jobs_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
         serializer = JobSerializer(data=request.data)

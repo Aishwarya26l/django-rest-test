@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from jobs.models import Job, JobType
 from core.formators import number_thousand_separator_format, calculate_elapsed_time
+from django.utils.timezone import now
+from django.utils.dateparse import parse_datetime
 
 
 class JobTypeSerializer(serializers.ModelSerializer):
@@ -36,4 +38,8 @@ class JobSerializer(serializers.ModelSerializer):
         ret['salary_from'] = number_thousand_separator_format(
             ret['salary_from'])
         ret['salary_to'] = number_thousand_separator_format(ret['salary_to'])
+        ret['created_at'] = calculate_elapsed_time(
+            (now() - parse_datetime(ret['created_at'])).seconds)
+        ret['updated_at'] = calculate_elapsed_time(
+            (now() - parse_datetime(ret['updated_at'])).seconds)
         return ret
