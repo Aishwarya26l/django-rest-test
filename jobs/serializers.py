@@ -10,6 +10,13 @@ class JobTypeSerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
+    # Add job_type reference for each job
+    job_type = serializers.SlugRelatedField(
+        many=False,
+        read_only=False,
+        slug_field='value',
+        queryset=JobType.objects.all()
+    )
 
     class Meta:
         model = Job
