@@ -1,5 +1,6 @@
 from uuid import uuid4
 from django.db import models
+from django.utils.timezone import now
 
 # job_types: id, value
 
@@ -23,8 +24,15 @@ class Job(models.Model):
     title = models.CharField(max_length=150, default='')
     job_type = models.ForeignKey(JobType, on_delete=models.CASCADE, default=0)
 
+    description = models.CharField(max_length=250, default='')
+    salary_from = models.FloatField(default=0)
+    salary_to = models.FloatField(default=0)
+    created_at = models.DateTimeField(default=now)
+    updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         app_label = 'jobs'
+        ordering = ('updated_at', )
 
     def __str__(self):
         return self.title
