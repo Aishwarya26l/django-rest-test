@@ -8,5 +8,8 @@ class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=150, default='')
 
+    class Meta:
+        app_label = 'jobs'
+
     def __str__(self):
         return self.title

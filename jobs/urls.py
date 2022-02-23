@@ -1,7 +1,6 @@
-from django.urls import path
-
+from django.conf.urls import url
+from jobs.views import JobList
 
 urlpatterns = [
-	# Create your urls here.
-    
+    url(r'^jobs$', JobList.as_view()),
 ]
