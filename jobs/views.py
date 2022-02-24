@@ -45,22 +45,19 @@ class JobDetail(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def get_queryset(self):
-        return Job.objects.all()
-
-    def get_object(self, pk):
+    def get_queryset(self, pk):
         try:
             return Job.objects.get(pk=pk)
         except Job.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
-        job = self.get_object(pk)
+        job = self.get_queryset(pk)
         serializer = JobSerializer(job)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        job = self.get_object(pk)
+        job = self.get_queryset(pk)
         serializer = JobSerializer(job, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -68,7 +65,7 @@ class JobDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        job = self.get_object(pk)
+        job = self.get_queryset(pk)
         job.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
