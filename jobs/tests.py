@@ -17,15 +17,15 @@ class JobTests(APITestCase):
                                     content_type='application/json')
         return response
 
-    # def test_job_types_seed(self):
-    #     """
-    #     Ensure jobtype table is seeded with values
-    #     """
-    #     url = reverse('jobType_list')
-    #     response = self.client.get(url)
+    def test_job_types_seed(self):
+        """
+        Ensure jobtype table is seeded with values
+        """
+        url = reverse('jobType_list')
+        response = self.client.get(url)
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertNotEqual(JobType.objects.count(), 0)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(JobType.objects.count(), 0)
 
     def test_create_job(self):
         """

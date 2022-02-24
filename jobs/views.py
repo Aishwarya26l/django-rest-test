@@ -1,6 +1,6 @@
 from django.http import Http404
-from jobs.models import Job
-from jobs.serializers import JobSerializer
+from jobs.models import Job, JobType
+from jobs.serializers import JobSerializer, JobTypeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -71,3 +71,25 @@ class JobDetail(APIView):
         job = self.get_object(pk)
         job.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class JobTypeList(APIView):
+    """
+    List all job types
+    """
+    authentication_classes = []
+    permission_classes = []
+
+    def get_queryset(self):
+        return JobType.objects.all()
+
+    def get(self, request, format=None):
+        jobTypes = self.get_queryset()
+
+        # Paginate response
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
+        jobTypes_page = paginator.paginate_queryset(jobTypes, request)
+
+        serializer = JobTypeSerializer(jobTypes_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
