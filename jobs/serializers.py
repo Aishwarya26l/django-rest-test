@@ -32,14 +32,19 @@ class JobSerializer(serializers.ModelSerializer):
                   'created_at',
                   'updated_at')
 
+    def elapsed_time(self, time):
+        diff = (now() - parse_datetime(time)).seconds
+        if diff == 0:
+            return 'Now'
+        else:
+            return calculate_elapsed_time(diff)
+
     def to_representation(self, instance):
         """Use custom formatters"""
         ret = super().to_representation(instance)
         ret['salary_from'] = number_thousand_separator_format(
             ret['salary_from'])
         ret['salary_to'] = number_thousand_separator_format(ret['salary_to'])
-        ret['created_at'] = calculate_elapsed_time(
-            (now() - parse_datetime(ret['created_at'])).seconds)
-        ret['updated_at'] = calculate_elapsed_time(
-            (now() - parse_datetime(ret['updated_at'])).seconds)
+        ret['created_at'] = self.elapsed_time(ret['created_at'])
+        ret['updated_at'] = self.elapsed_time(ret['updated_at'])
         return ret
