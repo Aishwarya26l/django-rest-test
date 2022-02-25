@@ -20,6 +20,11 @@ job_param = openapi.Schema(
     }
 )
 
+page_param = openapi.Parameter(
+    'page', openapi.IN_QUERY,
+    description="Page parameter",
+    type=openapi.TYPE_INTEGER)
+
 
 class JobList(APIView):
     """
@@ -38,7 +43,7 @@ class JobList(APIView):
         except Job.DoesNotExist:
             raise Http404
 
-    @swagger_auto_schema(responses={200: JobSerializer(many=True)}, operation_description="List all jobs")
+    @swagger_auto_schema(responses={200: JobSerializer(many=True)}, manual_parameters=[page_param], operation_description="List all jobs")
     def get(self, request, format=None):
         jobs = self.get_queryset()
 
@@ -106,16 +111,15 @@ class JobTypeList(APIView):
     def get_queryset(self, *args, **kwargs):
         try:
             if('pk' in kwargs):
-                return Job.objects.get(self.kwargs.get('pk'))
+                return JobType.objects.get(self.kwargs.get('pk'))
             else:
-                return Job.objects.all()
-        except Job.DoesNotExist:
+                return JobType.objects.all()
+        except JobType.DoesNotExist:
             raise Http404
 
     @ swagger_auto_schema(responses={200: JobTypeSerializer(many=True)})
     def get(self, request, format=None):
         jobTypes = self.get_queryset()
-
         # Paginate response
         paginator = PageNumberPagination()
         paginator.page_size = 5

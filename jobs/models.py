@@ -11,7 +11,7 @@ class JobType(models.Model):
 
     class Meta:
         app_label = 'jobs'
-        ordering = ('id',)
+        ordering = ['id']
 
     def __str__(self):
         return self.value
@@ -32,7 +32,7 @@ class Job(models.Model):
 
     class Meta:
         app_label = 'jobs'
-        ordering = ('updated_at', )
+        ordering = ['-updated_at']
 
     def __str__(self):
         return self.title
