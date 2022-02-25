@@ -15,8 +15,8 @@ job_param = openapi.Schema(
         'title': openapi.Schema(type=openapi.TYPE_STRING, example='Test Title'),
         'job_type': openapi.Schema(type=openapi.TYPE_STRING, example="Full time"),
         'description': openapi.Schema(type=openapi.TYPE_STRING, example='Description'),
-        'salary_to': openapi.Schema(type=openapi.TYPE_NUMBER, example=50000),
-        'salary_from': openapi.Schema(type=openapi.TYPE_NUMBER, example=100000),
+        'salary_to': openapi.Schema(type=openapi.TYPE_NUMBER, example=100000),
+        'salary_from': openapi.Schema(type=openapi.TYPE_NUMBER, example=50000),
     }
 )
 
@@ -29,8 +29,14 @@ class JobList(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def get_queryset(self):
-        return Job.objects.all()
+    def get_queryset(self, *args, **kwargs):
+        try:
+            if('pk' in kwargs):
+                return Job.objects.get(self.kwargs.get('pk'))
+            else:
+                return Job.objects.all()
+        except Job.DoesNotExist:
+            raise Http404
 
     @swagger_auto_schema(responses={200: JobSerializer(many=True)}, operation_description="List all jobs")
     def get(self, request, format=None):
@@ -61,20 +67,23 @@ class JobDetail(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def get_queryset(self, pk):
+    def get_queryset(self, *args, **kwargs):
         try:
-            return Job.objects.get(pk=pk)
+            if('pk' in kwargs):
+                return Job.objects.get(pk=self.kwargs.get('pk'))
+            else:
+                return Job.objects.all()
         except Job.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
-        job = self.get_queryset(pk)
+        job = self.get_queryset(pk=pk)
         serializer = JobSerializer(job)
         return Response(serializer.data)
 
     @ swagger_auto_schema(request_body=job_param)
     def put(self, request, pk, format=None):
-        job = self.get_queryset(pk)
+        job = self.get_queryset(pk=pk)
         serializer = JobSerializer(job, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -82,7 +91,7 @@ class JobDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        job = self.get_queryset(pk)
+        job = self.get_queryset(pk=pk)
         job.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -94,8 +103,14 @@ class JobTypeList(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def get_queryset(self):
-        return JobType.objects.all()
+    def get_queryset(self, *args, **kwargs):
+        try:
+            if('pk' in kwargs):
+                return Job.objects.get(self.kwargs.get('pk'))
+            else:
+                return Job.objects.all()
+        except Job.DoesNotExist:
+            raise Http404
 
     @ swagger_auto_schema(responses={200: JobTypeSerializer(many=True)})
     def get(self, request, format=None):

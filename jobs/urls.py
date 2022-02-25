@@ -17,9 +17,9 @@ schema_view = get_schema_view(
 # ends here
 
 urlpatterns = [
-    path('doc/', schema_view.with_ui('swagger'),
+    path('doc/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
          name='schema-redoc'),
     path('jobs/', JobList.as_view(), name="job_list"),
     path('jobs/<uuid:pk>', JobDetail.as_view(), name="job_detail"),

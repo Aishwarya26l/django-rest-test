@@ -25,9 +25,10 @@ class JobSerializer(serializers.ModelSerializer):
         """
         Check that the salary_to is greater than salary_from
         """
-        if data['salary_from'] > data['salary_to']:
-            raise serializers.ValidationError(
-                {"salary_to": "salary_to must be greater than salary_from"})
+        if ('salary_from' in data) and ('salary_to' in data):
+            if data['salary_from'] >= data['salary_to']:
+                raise serializers.ValidationError(
+                    {"salary_to": "salary_to must be greater than or equal to salary_from"})
         return data
 
     class Meta:
