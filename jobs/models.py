@@ -27,7 +27,7 @@ class Job(models.Model):
     description = models.CharField(max_length=250, default='')
     salary_from = models.FloatField(default=0)
     salary_to = models.FloatField(default=0)
-    created_at = models.DateTimeField(default=now)
+    created_at = models.DateTimeField(auto_now_add=now)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
