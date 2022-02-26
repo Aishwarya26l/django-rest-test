@@ -34,7 +34,7 @@ SECRET_KEY = '<replace_me>'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'django-rest-app.herokuapp.com']
 
 # Application definition
 INSTALLED_APPS = [
