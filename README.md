@@ -5,7 +5,7 @@ A Django rest app to create, update and delete job details. The app currently us
 Author : Aishwarya Lakshminarasimhan
 
 # App Demo
-Hosted on Heroku : https://django-rest-app.herokuapp.com/api/v1/
+Hosted on Heroku : https://django-rest-app.herokuapp.com/api/v1/doc/
 
 API endpoints -
 
